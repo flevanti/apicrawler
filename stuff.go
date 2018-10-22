@@ -56,7 +56,7 @@ func getDT() string {
 // loadEnvVariables
 func loadEnvVariables() bool {
 	//read .env variables
-	if err := godotenv.Load(); err != nil {
+	if err := godotenv.Load(".env"); err != nil {
 		return false
 	}
 	return true

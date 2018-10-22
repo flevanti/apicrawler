@@ -13,10 +13,7 @@ func importGRTUKRI() {
 	currentPage := 0
 	baseURL := ""
 	size := payload.PageSize
-	fmt.Printf("Page size is %v (payload %v)\n", size, payload.PageSize)
-	if size < 10 {
-	    size = 50
-	}
+
 	if !initialiseMongo() {
 		return
 	}
@@ -66,7 +63,7 @@ func importGRTUKRI() {
 			saveRecords(dataJSON, currentPage)
 		}
 
-		if payload.MaxPages > 0 && payload.MaxPages == currentPage {
+		if payload.MaxPages > 0 && currentPage >= payload.MaxPages  {
 			fmt.Printf("All pages retrieved...\n")
 			break
 		}

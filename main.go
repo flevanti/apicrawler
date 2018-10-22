@@ -38,7 +38,7 @@ func main() {
 	defer printFinalStatistics()
 
 	if !loadEnvVariables() {
-		fmt.Printf("Unable to read .ENV file 💥 \n")
+		fmt.Printf("Unable to read .env file 💥 \n")
 		return
 	}
 
@@ -47,11 +47,12 @@ func main() {
 
 	fmt.Printf("We may think I'm migrating this from old languages to improve stability and performance\n")
 	fmt.Printf("The truth is I just wanted support for emojis.... 🚀 🤠 🍍\n")
-	if isAWS {
+	if isLambda {
 		// AWS lambda will add the payload to the handler call, we just need to specify the handler fn name...
+		// If the lambda is the local docker implementation, we need to pass the payload (a dummy one) as an argument
 		lambda.Start(Handler)
 	} else {
-		// because we are calling the handler manually, we add the payload (a dummy one)
+		// because we are calling the handler manually, we load a payload (a dummy one)
 		err := loadDummyPayload()
 		if err != nil {
 			fmt.Printf("Unable to load dummy payload: %s 💥 💥 💥 \n", err)
@@ -64,7 +65,13 @@ func main() {
 }
 
 // Handler doc block....
-func Handler(payload payloadType) {
+func Handler(payloadLocalScope payloadType) {
+	// if the handler was called by lambda we have the payload passed
+	// as a parameter but not in the global var... time to take care of it...
+	if isLambda {
+		payload = payloadLocalScope
+	}
+
 	invocations++
 	printMemUsage("Handler entrypoint")
 
@@ -72,7 +79,12 @@ func Handler(payload payloadType) {
 		fmt.Printf("Max pages to process %v\n", payload.MaxPages)
 	}
 
-	fmt.Printf("Async saving 🔀  flag is %v\n", strings.ToUpper(strconv.FormatBool(payload.AsyncSaving)))
+	fmt.Printf("Async saving 🔀 flag is %v\n", strings.ToUpper(strconv.FormatBool(payload.AsyncSaving)))
+
+	if payload.SourceID == "" {
+		fmt.Printf("Payload not founf or empty 💥 💥 💥 \n")
+		return
+	}
 
 	heartbeatKeepAlive(payload.SourceID)
 	defer heartbeatEnd()

@@ -1,8 +1,8 @@
 {
     "SourceID": "GRTUKRI",
-    "MaxPages": 2,
+    "MaxPages": 0,
     "PageSize": 100,
-    "AsyncSaving": false,
+    "AsyncSaving": true,
     "SourceID__help": "source ID used to identify the import logic.",
     "PageSize__help": "Number of record for each page, this value needs to be inside the range specified by the source (if supported)",
     "MaxPages__help":"Number of pages to retrieve, zero means no limit",
