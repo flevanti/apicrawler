@@ -1,12 +1,33 @@
 {
-    "SourceID": "GRTUKRI",
-    "MaxPages": 0,
-    "PageSize": 100,
-    "AsyncSaving": true,
-    "SourceID__help": "source ID used to identify the import logic.",
-    "PageSize__help": "Number of record for each page, this value needs to be inside the range specified by the source (if supported)",
-    "MaxPages__help":"Number of pages to retrieve, zero means no limit",
-    "AsyncSaving__help": "Use a go routine to perform the saving. Could be faster or a disaster 😂  "
-
-
+  "SourceID": "GRTUKRI",
+  "MaxPages": 5,
+  "PageSize": 100,
+  "AsyncSaving": true,
+  "EndpointsParallelProcessing": true,
+  "Endpoints": [
+    {
+      "Name": "organisations",
+      "Uri": "https://gtr.ukri.org/gtr/api/organisations",
+      "Collection": "ff_grtukri_organisations",
+      "ResponseElement": "organisation"
+    },
+    {
+      "Name": "funds",
+      "Uri": "https://gtr.ukri.org/gtr/api/funds",
+      "Collection": "ff_grtukri_funds",
+      "ResponseElement": "fund"
+    },
+    {
+      "Name": "projects",
+      "Uri": "https://gtr.ukri.org/gtr/api/projects",
+      "Collection": "ff_grtukri_projects",
+      "ResponseElement": "project"
+    },
+    {
+      "Name": "persons",
+      "Uri": "https://gtr.ukri.org/gtr/api/persons",
+      "Collection": "ff_grtukri_persons",
+      "ResponseElement": "person"
+    }
+  ]
 }

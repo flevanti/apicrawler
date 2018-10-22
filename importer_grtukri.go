@@ -6,28 +6,65 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strconv"
+	"sync"
 )
 
-func importGRTUKRI() {
+type responseHeaderStructGrtukri struct {
+	Organisation []interface{} `json:"organisation"`
+	Fund         []interface{} `json:"fund"`
+	Person       []interface{} `json:"person"`
+	Project      []interface{} `json:"project"`
+	Page         int           `json:"page"`
+	Size         int           `json:"size"`
+	TotalPages   int           `json:"totalPages"`
+	TotalSize    int           `json:"totalSize"`
+}
+
+func importGrtukri() {
+	var wg sync.WaitGroup
+
+	fmt.Printf("Endpoints parallel processing enabled? %s\n",
+		strconv.FormatBool(payload.EndpointsParallelProcessing))
+
+	for _, v := range payload.Endpoints {
+		fmt.Printf("PROCESSING %s (Collection %s Uri %s) \n", v.Name, v.Collection, v.Uri)
+		if !collectionExists(v.Collection) {
+			fmt.Printf("Collection %s does not exists in the database! 💥 💥\n", v.Collection)
+			fmt.Printf("Import skipped ❗\n")
+			continue
+		}
+		wg.Add(1)
+		if payload.EndpointsParallelProcessing {
+			go importGrtukriEndpointLoop(v.Name, v.Collection, v.Uri, v.ResponseElement, &wg)
+		} else {
+			importGrtukriEndpointLoop(v.Name, v.Collection, v.Uri, v.ResponseElement, &wg)
+		}
+	}
+
+	fmt.Printf("WAITING FOR ALL ENDPOINTS TO BE PROCESSED.... \n")
+	wg.Wait()
+	fmt.Printf("DONE...\n")
+
+}
+
+func
+importGrtukriEndpointLoop(name string, collection string, uri string, responseElement string, wgCaller *sync.WaitGroup) {
+	defer wgCaller.Done()
 
 	currentPage := 0
 	baseURL := ""
 	size := payload.PageSize
-
-	if !initialiseMongo() {
-		return
-	}
-	defer closeMongo()
-
-	fmt.Printf("Mongo collection is %s\n", mongoCollection.Name())
-	printMemUsage("After mongo initialisation")
+	client := &http.Client{}
+	var dataToSave []interface{}
+	var wg sync.WaitGroup
 
 	for {
 		currentPage++
-		baseURL = "https://gtr.ukri.org/gtr/api/organisations?s=" +
-			strconv.Itoa(size) + "&p=" + strconv.Itoa(currentPage)
+		baseURL = uri +
+			"?s=" + strconv.Itoa(size) +
+			"&p=" + strconv.Itoa(currentPage)
 		fmt.Printf("Querying %s\n", baseURL)
-		client := &http.Client{}
+
 		req, _ := http.NewRequest("GET", baseURL, nil)
 		req.Header.Set("Accept", "application/vnd.rcuk.gtr.json-v6")
 		response, err := client.Do(req)
@@ -36,7 +73,7 @@ func importGRTUKRI() {
 			fmt.Printf("The HTTP payload failed with error %s\n", err)
 			return
 		}
-		defer response.Body.Close()
+
 		data, _ := ioutil.ReadAll(response.Body)
 		if response.StatusCode != 200 {
 			fmt.Printf("The HTTP payload failed, status code is %v\n", response.StatusCode)
@@ -48,7 +85,7 @@ func importGRTUKRI() {
 			return
 		}
 
-		var dataJSON responseHeaderStruct
+		var dataJSON responseHeaderStructGrtukri
 		err = json.Unmarshal([]byte(data), &dataJSON)
 		if err != nil {
 			fmt.Printf("Error while converting response to json object %s 💥\n", err)
@@ -56,25 +93,48 @@ func importGRTUKRI() {
 		}
 		fmt.Printf("page %d retrieved, size %d, total pages %d, total size %d\n", dataJSON.Page, dataJSON.Size, dataJSON.TotalPages, dataJSON.TotalSize)
 
-		wg.Add(1)
-		if payload.AsyncSaving {
-			go saveRecords(dataJSON, currentPage)
-		} else {
-			saveRecords(dataJSON, currentPage)
+		//check what data to save....
+		switch responseElement {
+		case "organisation":
+			dataToSave = dataJSON.Organisation
+			break
+		case "fund":
+			dataToSave = dataJSON.Fund
+			break
+		case "person":
+			dataToSave = dataJSON.Person
+			break
+		case "project":
+			dataToSave = dataJSON.Project
+			break
+		default:
+			dataToSave = nil
 		}
 
-		if payload.MaxPages > 0 && currentPage >= payload.MaxPages  {
+		if dataToSave == nil {
+			fmt.Printf("Unable to find records extracted in element  😒 ...\n")
+			saveRecordsErrors++
+
+		}
+
+		wg.Add(1)
+		if payload.AsyncSaving {
+			go saveRecordsGrtukri(collection, dataToSave, currentPage, &wg)
+		} else {
+			saveRecordsGrtukri(collection, dataToSave, currentPage, &wg)
+		}
+		if saveRecordsErrors >= saveRecordsErrorsLimit {
+			fmt.Printf("Too many errors while saving, please try again later... bye bye 👋 ...\n")
+			break
+		}
+
+		if payload.MaxPages > 0 && currentPage >= payload.MaxPages {
 			fmt.Printf("All pages retrieved...\n")
 			break
 		}
 
 		if currentPage == dataJSON.TotalPages {
 			fmt.Printf("All pages retrieved...\n")
-			break
-		}
-
-		if saveRecordsErrors >= saveRecordsErrorsLimit {
-			fmt.Printf("Too many errors while saving, please try again later... bye bye 👋🏼...\n")
 			break
 		}
 

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"sync"
 
 	"github.com/mongodb/mongo-go-driver/bson"
 	"github.com/mongodb/mongo-go-driver/core/command"
@@ -12,17 +13,17 @@ import (
 
 var mongoClient *mongo.Client
 var mongoDb *mongo.Database
-var mongoCollection *mongo.Collection
-var mongoCollectionHb *mongo.Collection
 var mongoCollectionsList = make(map[string]bool)
+var mongoCollectionHb *mongo.Collection
 var saveRecordsErrors = 0
 var saveRecordsErrorsLimit = 10
 
 // saveRecords
-func saveRecords(data responseHeaderStruct, page int) {
+// VERY IMPORTANT THE WAIT GROUP... USE THE POINTER OTHERWISE WE CREATE A COPY OF IT AND IT WILL BE A LOOONG WAIT
+func saveRecordsGrtukri(collectionName string, data []interface{}, page int, wg *sync.WaitGroup) {
 	defer wg.Done()
 	fmt.Printf("Request to save page %d ...\n", page)
-	_, err := mongoCollection.InsertMany(context.Background(), data.Organisation)
+	_, err := mongoDb.Collection(collectionName).InsertMany(context.Background(), data)
 	if err != nil {
 		fmt.Printf("💥💥💥💥💥💥 Error while saving to mongo: %s\n", err)
 		saveRecordsErrors++
@@ -37,12 +38,11 @@ func initialiseMongo() bool {
 	fmt.Printf("Initialising Mongo... 🍃 \n")
 
 	var err error
-	var uri, db, coll, collhb string = os.Getenv("MONGO_URI"),
+	var uri, db, collhb string = os.Getenv("MONGO_URI"),
 		os.Getenv("MONGO_DATABASE"),
-		os.Getenv("MONGO_COLLECTION"),
 		os.Getenv("MONGO_COLLECTION_HB")
 
-	if uri == "" || db == "" || coll == "" || collhb == "" {
+	if uri == "" || db == "" || collhb == "" {
 		fmt.Printf("Db parameters missing\n")
 		return false
 	}
@@ -87,14 +87,6 @@ func initialiseMongo() bool {
 	}
 
 	fmt.Printf("Mongo db collections list retrieved\n")
-
-	// SELECT COLLECTION FOR DATA
-	if !collectionExists(coll) {
-		fmt.Printf("Mongo db collection %s does not exist\n", coll)
-		return false
-	}
-	fmt.Printf("Mongo db collection %s exist, this is good...\n", coll)
-	mongoCollection = mongoDb.Collection(coll)
 
 	// SELECT COLLECTION FOR HB
 	if !collectionExists(collhb) {
@@ -160,7 +152,6 @@ func collectionExists(collectionName string) bool {
 
 func closeMongo() {
 	fmt.Printf("Disconnecting Mongo client... 🍂 \n")
-	mongoCollection = nil
 	mongoCollectionHb = nil
 	mongoClient.Disconnect(context.Background())
 	mongoClient = nil

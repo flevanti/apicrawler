@@ -4,29 +4,27 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
-	"sync"
 	"time"
 
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
-type responseHeaderStruct struct {
-	Organisation []interface{}
-	Page         int `json:"page"`
-	Size         int `json:"size"`
-	TotalPages   int `json:"totalPages"`
-	TotalSize    int `json:"totalSize"`
-}
-
 type payloadType struct {
-	SourceID    string `json:"SourceID"`
-	MaxPages    int    `json:"MaxPages"`
-	PageSize    int    `json:"PageSize"`
-	AsyncSaving bool   `json:"AsyncSaving"`
+	SourceID                    string `json:"SourceID,omitempty"`
+	MaxPages                    int    `json:"MaxPages,omitempty"`
+	PageSize                    int    `json:"PageSize,omitempty"`
+	AsyncSaving                 bool   `json:"AsyncSaving,omitempty"`
+	EndpointsParallelProcessing bool   `json:"EndpointsParallelProcessing,omitempty"`
+
+	Endpoints []struct {
+		Name            string `json:"Name"`
+		Uri             string `json:"Uri"`
+		Collection      string `json:"Collection"`
+		ResponseElement string `json:"ResponseElement"`
+	} `json:"Endpoints"`
 }
 
 var payload payloadType
-var wg sync.WaitGroup
 var dummyPayloadFileName = "dummyPayload.json"
 var bootTime int64
 var invocations int
@@ -89,12 +87,19 @@ func Handler(payloadLocalScope payloadType) {
 	heartbeatKeepAlive(payload.SourceID)
 	defer heartbeatEnd()
 
+	if !initialiseMongo() {
+		return
+	}
+	defer closeMongo()
+
+	printMemUsage("After mongo initialisation")
+
 	switch payload.SourceID {
 	case "GRTUKRI":
-		importGRTUKRI()
+		importGrtukri()
 		break
 	case "PUBMED":
-		importPUBMED()
+		importPubmed()
 		break
 	default:
 		// NOT FOUND!
