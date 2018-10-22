@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-var heartbeatSeconds int64 = 2
+var heartbeatSeconds int64 = 30
 var heartbeatDatabaseID = ""
 
 // heartbeatKeepAlive

@@ -12,19 +12,34 @@ import (
 )
 
 var isLambda bool
+var isDocker bool
+var isAWS bool
 
 // checkEnvironment
 func checkEnvironment() {
+
+	//default value
+	isLambda = false
+	isDocker = false
+	isAWS = false
+
 	if len(os.Getenv("AWS_REGION")) != 0 {
 		isLambda = true
-	} else {
-		isLambda = false
 	}
+	//even if we are in an AWS/LAMBDA environment, it could be a docker container...
+	//so let's use another env var to understand if docker
+	//after comparing docker lambda and AWS lambda I noticed that AWS_SESSION_TOKEN env var is (for the moment) only available in AWS
+	if isLambda && len(os.Getenv("AWS_SESSION_TOKEN")) == 0 {
+		isDocker = true
+	}
+	//Try to understand if we are running in AWS
+	isAWS = isLambda && !isDocker
+
 }
 
 // greetings
 func greetings() {
-	if isLambda {
+	if isAWS {
 		fmt.Printf("Hello Jeff 🎁   \n")
 	} else {
 		fmt.Printf("Greetings Professor Falken 🚀   \n")

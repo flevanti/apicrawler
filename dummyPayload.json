@@ -1,6 +1,6 @@
 {
     "SourceID": "GRTUKRI",
-    "MaxPages": 0,
+    "MaxPages": 2,
     "PageSize": 100,
     "AsyncSaving": false,
     "SourceID__help": "source ID used to identify the import logic.",

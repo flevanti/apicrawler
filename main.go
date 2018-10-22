@@ -47,8 +47,8 @@ func main() {
 
 	fmt.Printf("We may think I'm migrating this from old languages to improve stability and performance\n")
 	fmt.Printf("The truth is I just wanted support for emojis.... 🚀 🤠 🍍\n")
-	if isLambda {
-		// lambda will add the payload to the handler call, we just need to specify the handler fn name...
+	if isAWS {
+		// AWS lambda will add the payload to the handler call, we just need to specify the handler fn name...
 		lambda.Start(Handler)
 	} else {
 		// because we are calling the handler manually, we add the payload (a dummy one)
@@ -66,7 +66,6 @@ func main() {
 // Handler doc block....
 func Handler(payload payloadType) {
 	invocations++
-
 	printMemUsage("Handler entrypoint")
 
 	if payload.MaxPages > 0 {
