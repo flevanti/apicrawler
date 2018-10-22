@@ -14,7 +14,9 @@ func importGRTUKRI() {
 	baseURL := ""
 	size := payload.PageSize
 	fmt.Printf("Page size is %v (payload %v)\n", size, payload.PageSize)
-	
+	if size < 10 {
+	    size = 50
+	}
 	if !initialiseMongo() {
 		return
 	}
