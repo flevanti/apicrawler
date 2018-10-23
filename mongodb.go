@@ -72,7 +72,7 @@ func initialiseMongo() bool {
 	*/
 
 	// SELECT DATABASE
-	if databaseExists(db) {
+	if !databaseExists(db) {
 		fmt.Printf("Mongo db %s does not exists\n", db)
 		return false
 	}

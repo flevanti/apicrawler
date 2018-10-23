@@ -1,6 +1,6 @@
 {
   "SourceID": "GRTUKRI",
-  "MaxPages": 5,
+  "MaxPages": 0,
   "PageSize": 100,
   "AsyncSaving": true,
   "EndpointsParallelProcessing": true,
