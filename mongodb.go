@@ -130,6 +130,8 @@ func retrieveCollectionsList() bool {
 }
 
 func databaseExists(databaseName string) bool {
+	//TODO FIX ERROR IN RETRIEVING DATABASE NAMES!!! FFS
+	return true
 	var databasesList []string
 	var err error
 

@@ -2,21 +2,22 @@ package main
 
 import (
 	"fmt"
-	"strconv"
-	"strings"
 	"time"
 
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
 type payloadType struct {
+	SourceID string `json:"SourceID,omitempty"`
+}
+
+type importerConfigType struct {
 	SourceID                    string `json:"SourceID,omitempty"`
 	MaxPages                    int    `json:"MaxPages,omitempty"`
 	PageSize                    int    `json:"PageSize,omitempty"`
 	AsyncSaving                 bool   `json:"AsyncSaving,omitempty"`
 	EndpointsParallelProcessing bool   `json:"EndpointsParallelProcessing,omitempty"`
-
-	Endpoints []struct {
+	Endpoints                   []struct {
 		Name            string `json:"Name"`
 		Uri             string `json:"Uri"`
 		Collection      string `json:"Collection"`
@@ -25,12 +26,18 @@ type payloadType struct {
 }
 
 var payload payloadType
+var importerConfig importerConfigType
 var dummyPayloadFileName = "dummyPayload.json"
 var bootTime int64
 var invocations int
+var sourcesConfigs = map[string]map[string]string{
+	"GRTUKRI": {"config_file": "grtukri.conf.json", "function_name": "importGrtukri"},
+	"PUBMED":  {"config_file": "pubmed.conf.json", "function_name": "importPubmed"},
+}
 
 // main
 func main() {
+
 	printMemUsage("main entrypoint 🍾")
 	bootTime = time.Now().Unix()
 	defer printFinalStatistics()
@@ -73,12 +80,13 @@ func Handler(payloadLocalScope payloadType) {
 	invocations++
 	printMemUsage("Handler entrypoint")
 
+	/*
 	if payload.MaxPages > 0 {
 		fmt.Printf("Max pages to process %v\n", payload.MaxPages)
 	}
 
 	fmt.Printf("Async saving 🔀 flag is %v\n", strings.ToUpper(strconv.FormatBool(payload.AsyncSaving)))
-
+*/
 	if payload.SourceID == "" {
 		fmt.Printf("Payload not founf or empty 💥 💥 💥 \n")
 		return
@@ -94,16 +102,29 @@ func Handler(payloadLocalScope payloadType) {
 
 	printMemUsage("After mongo initialisation")
 
+	if _, exists := sourcesConfigs[payload.SourceID]; !exists {
+		// NOT FOUND!
+		fmt.Printf("Source ID %s not found 💥💥 \n", payload.SourceID)
+		return
+	}
+
+	if err := loadConfigFile(sourcesConfigs[payload.SourceID]["config_file"]); err != nil {
+		// ERROR LOADING CONFIG FILE
+		fmt.Printf("Error while loading config file for source %s: %s 💥💥 \n", payload.SourceID, err)
+		return
+	}
+	fmt.Printf("Configuration file ok... 👍\n")
+
+	//I'M ASHAMED BUT I WASN'T ABLE TO FIND A NICE ELEGANT CLEAN CLEAR AND EASY WAY TO CALL A FUNCTION DYNAMICALLY
 	switch payload.SourceID {
 	case "GRTUKRI":
 		importGrtukri()
 		break
 	case "PUBMED":
-		importPubmed()
+		importGrtukri()
 		break
 	default:
-		// NOT FOUND!
-		fmt.Printf("Source ID %s not found 💥💥 \n", payload.SourceID)
+		fmt.Printf("Unable to find importer function for source %s 💥💥 \n", payload.SourceID)
 		return
 	}
 

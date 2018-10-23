@@ -80,19 +80,30 @@ func b2KiB(b uint64) uint64 {
 func loadDummyPayload() error {
 	var content string
 	var err error
-	content = loadDummyPayloadFile()
+	content = readFileContent(dummyPayloadFileName)
 	err = json.Unmarshal([]byte(content), &payload)
 	return err
 }
 
-// loadDummyPayloadFile .
-func loadDummyPayloadFile() string {
+func loadConfigFile(configFile string) error {
+	configFile = "config_files/" + configFile
+	var content string
+	var err error
+	content = readFileContent(configFile)
+	err = json.Unmarshal([]byte(content), &importerConfig)
+	return err
+
+	return nil
+}
+
+// readFileContent .
+func readFileContent(filename string) string {
 	var content []byte
 	var err error
-	if fileExists(dummyPayloadFileName) {
-		content, err = ioutil.ReadFile(dummyPayloadFileName)
+	if fileExists(filename) {
+		content, err = ioutil.ReadFile(filename)
 		if err != nil {
-			fmt.Printf("Unable to find dummy payload %s\n", dummyPayloadFileName)
+			fmt.Printf("Unable to find file to load %s\n", filename)
 			return "{}"
 		}
 	}

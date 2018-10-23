@@ -24,9 +24,9 @@ func importGrtukri() {
 	var wg sync.WaitGroup
 
 	fmt.Printf("Endpoints parallel processing enabled? %s\n",
-		strconv.FormatBool(payload.EndpointsParallelProcessing))
+		strconv.FormatBool(importerConfig.EndpointsParallelProcessing))
 
-	for _, v := range payload.Endpoints {
+	for _, v := range importerConfig.Endpoints {
 		fmt.Printf("PROCESSING %s (Collection %s Uri %s) \n", v.Name, v.Collection, v.Uri)
 		if !collectionExists(v.Collection) {
 			fmt.Printf("Collection %s does not exists in the database! 💥 💥\n", v.Collection)
@@ -34,7 +34,7 @@ func importGrtukri() {
 			continue
 		}
 		wg.Add(1)
-		if payload.EndpointsParallelProcessing {
+		if importerConfig.EndpointsParallelProcessing {
 			go importGrtukriEndpointLoop(v.Name, v.Collection, v.Uri, v.ResponseElement, &wg)
 		} else {
 			importGrtukriEndpointLoop(v.Name, v.Collection, v.Uri, v.ResponseElement, &wg)
@@ -53,7 +53,7 @@ importGrtukriEndpointLoop(name string, collection string, uri string, responseEl
 
 	currentPage := 0
 	baseURL := ""
-	size := payload.PageSize
+	size := importerConfig.PageSize
 	client := &http.Client{}
 	var dataToSave []interface{}
 	var wg sync.WaitGroup
@@ -118,7 +118,7 @@ importGrtukriEndpointLoop(name string, collection string, uri string, responseEl
 		}
 
 		wg.Add(1)
-		if payload.AsyncSaving {
+		if importerConfig.AsyncSaving {
 			go saveRecordsGrtukri(collection, dataToSave, currentPage, &wg)
 		} else {
 			saveRecordsGrtukri(collection, dataToSave, currentPage, &wg)
@@ -128,7 +128,7 @@ importGrtukriEndpointLoop(name string, collection string, uri string, responseEl
 			break
 		}
 
-		if payload.MaxPages > 0 && currentPage >= payload.MaxPages {
+		if importerConfig.MaxPages > 0 && currentPage >= importerConfig.MaxPages {
 			fmt.Printf("All pages retrieved...\n")
 			break
 		}
