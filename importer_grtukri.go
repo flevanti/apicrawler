@@ -47,8 +47,7 @@ func importGrtukri() {
 
 }
 
-func
-importGrtukriEndpointLoop(name string, collection string, uri string, responseElement string, wgCaller *sync.WaitGroup) {
+func importGrtukriEndpointLoop(name string, collection string, uri string, responseElement string, wgCaller *sync.WaitGroup) {
 	defer wgCaller.Done()
 
 	currentPage := 0

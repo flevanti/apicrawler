@@ -72,7 +72,12 @@ func initialiseMongo() bool {
 	*/
 
 	// SELECT DATABASE
-	if !databaseExists(db) {
+	dbExists, err := databaseExists(db)
+	if err != nil {
+		fmt.Printf("Error while retrieving databases list 💥 : %s\n", err)
+		return false
+	}
+	if !dbExists {
 		fmt.Printf("Mongo db %s does not exists\n", db)
 		return false
 	}
@@ -81,8 +86,9 @@ func initialiseMongo() bool {
 	mongoDb = mongoClient.Database(db)
 
 	// RETRIEVE COLLECTIONS LIST
-	if retrieveCollectionsList() == false {
-		fmt.Printf("Mongo db collections list not retrieved\n")
+	err = retrieveCollectionsList()
+	if err != nil {
+		fmt.Printf("Mongo db collections list not retrieved 💥: %s\n", err)
 		return false
 	}
 
@@ -99,7 +105,7 @@ func initialiseMongo() bool {
 	return true
 }
 
-func retrieveCollectionsList() bool {
+func retrieveCollectionsList() (error) {
 	var cur command.Cursor
 	var err error
 	cnt := context.Background()
@@ -107,14 +113,14 @@ func retrieveCollectionsList() bool {
 	cur, err = mongoDb.ListCollections(context.Background(), nil)
 	if err != nil {
 		fmt.Printf("Mongo db collections list not retrieved\n")
-		return false
+		return err
 	}
 
 	for cur.Next(cnt) {
 		elem := bson.NewDocument()
 		if err := cur.Decode(elem); err != nil {
 			fmt.Printf("Unable to decode element while reading collections list\n")
-			return false
+			return err
 		}
 		name := elem.Lookup("name").StringValue()
 		fmt.Printf("collection found %s\n", name)
@@ -123,28 +129,26 @@ func retrieveCollectionsList() bool {
 
 	if err := cur.Err(); err != nil {
 		fmt.Printf("Cursor error while reading collections list\n")
-		return false
+		return err
 	}
 
-	return true
+	return nil
 }
 
-func databaseExists(databaseName string) bool {
-	//TODO FIX ERROR IN RETRIEVING DATABASE NAMES!!! FFS
-	return true
+func databaseExists(databaseName string) (bool, error) {
 	var databasesList []string
 	var err error
 
 	databasesList, err = mongoClient.ListDatabaseNames(context.Background(), nil)
 	if err != nil {
-		return false
+		return false, err
 	}
 	for _, v := range databasesList {
 		if v == databaseName {
-			return true
+			return true, nil
 		}
 	}
-	return false
+	return false, nil
 }
 
 func collectionExists(collectionName string) bool {
