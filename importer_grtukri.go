@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"strconv"
 	"sync"
 )
@@ -28,7 +29,7 @@ func importGrtukri() {
 
 	for _, v := range importerConfig.Endpoints {
 		fmt.Printf("PROCESSING %s (Collection %s Uri %s) \n", v.Name, v.Collection, v.Uri)
-		if !collectionExists(v.Collection) {
+		if os.Getenv("MONGO_COLLECTION_MUST_EXISTS") != "0" && !collectionExists(v.Collection) {
 			fmt.Printf("Collection %s does not exists in the database! 💥 💥\n", v.Collection)
 			fmt.Printf("Import skipped ❗\n")
 			continue

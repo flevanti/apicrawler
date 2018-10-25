@@ -91,15 +91,17 @@ func initialiseMongo() bool {
 		fmt.Printf("Mongo db collections list not retrieved 💥: %s\n", err)
 		return false
 	}
-
 	fmt.Printf("Mongo db collections list retrieved\n")
 
-	// SELECT COLLECTION FOR HB
-	if !collectionExists(collhb) {
-		fmt.Printf("Mongo db collection %s does not exist\n", collhb)
-		return false
+	if os.Getenv("MONGO_COLLECTION_MUST_EXISTS") != "0" {
+		// SELECT COLLECTION FOR HB
+		if !collectionExists(collhb) {
+			fmt.Printf("Mongo db collection %s does not exist\n", collhb)
+			return false
+		}
+		fmt.Printf("Mongo db collection %s exist, this is good...\n", collhb)
 	}
-	fmt.Printf("Mongo db collection %s exist, this is good...\n", collhb)
+
 	mongoCollectionHb = mongoDb.Collection(collhb)
 
 	return true

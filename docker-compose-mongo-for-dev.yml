@@ -17,14 +17,14 @@ services:
   mongo:
     image: mongo:3.6.8-stretch
     command:  --auth
-    restart: always
+#    restart: always
     ports:
     - 27017:27017
     environment:
       MONGO_INITDB_ROOT_USERNAME: mongo
       MONGO_INITDB_ROOT_PASSWORD: mongo
     volumes:
-    - "~/dockermongo/datadir:/data/db"
+    - "./mongo_datadir:/data/db"
     networks:
     - mongonetwork
 
