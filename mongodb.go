@@ -50,13 +50,12 @@ func initialiseMongo() bool {
 	// CREATE CLIENT
 	mongoClient, err = mongo.Connect(context.Background(), uri, nil)
 	if err != nil {
-		fmt.Printf("Mongo db client creation failed\n")
+		fmt.Printf("Mongo db client creation failed: %s\n", err)
 		return false
 	}
 	fmt.Printf("Mongo db client created\n")
 
 	/*
-
 		// THIS BIT OF CODE WAS INITIALLY NEEDED.. NOW IT IS NOT ANYMORE
 		// NOT SURE WHY...
 		// LEFT FOR FUTURE REFERENCE
@@ -72,16 +71,18 @@ func initialiseMongo() bool {
 	*/
 
 	// SELECT DATABASE
-	dbExists, err := databaseExists(db)
-	if err != nil {
-		fmt.Printf("Error while retrieving databases list 💥 : %s\n", err)
-		return false
+	if os.Getenv("MONGO_DATABASE_MUST_EXISTS") != "0" {
+		dbExists, err := databaseExists(db)
+		if err != nil {
+			fmt.Printf("Error while retrieving databases list 💥 : %s\n", err)
+			return false
+		}
+		if !dbExists {
+			fmt.Printf("Mongo db %s does not exists\n", db)
+			return false
+		}
+		fmt.Printf("Mongo db %s found\n", db)
 	}
-	if !dbExists {
-		fmt.Printf("Mongo db %s does not exists\n", db)
-		return false
-	}
-	fmt.Printf("Mongo db %s found\n", db)
 
 	mongoDb = mongoClient.Database(db)
 

@@ -33,6 +33,7 @@ var invocations int
 var sourcesConfigs = map[string]map[string]string{
 	"GRTUKRI": {"config_file": "grtukri.conf.json", "function_name": "importGrtukri"},
 	"PUBMED":  {"config_file": "pubmed.conf.json", "function_name": "importPubmed"},
+	"NIH":     {"config_file": "nih.conf.json", "function_name": "importPubmed"},
 }
 
 // main
@@ -122,6 +123,9 @@ func Handler(payloadLocalScope payloadType) {
 		break
 	case "PUBMED":
 		importGrtukri()
+		break
+	case "NIH":
+		importNih()
 		break
 	default:
 		fmt.Printf("Unable to find importer function for source %s 💥💥 \n", payload.SourceID)

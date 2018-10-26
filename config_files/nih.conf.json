@@ -1,0 +1,15 @@
+{
+  "SourceID": "NIH",
+  "MaxPages": 0,
+  "PageSize": 50,
+  "AsyncSaving": true,
+  "EndpointsParallelProcessing": true,
+  "Endpoints": [
+    {
+      "Name": "projects",
+      "Uri": "https://api.federalreporter.nih.gov/v1/Projects/search?query=agency:USDA,DOD,EPA,HHS,NASA,NSF,VA,NCER",
+      "Collection": "ff_nih_projects",
+      "ResponseElement": "items"
+    }
+  ]
+}
