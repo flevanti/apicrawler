@@ -6,8 +6,20 @@
   "EndpointsParallelProcessing": true,
   "Endpoints": [
     {
-      "Name": "projects",
-      "Uri": "https://api.federalreporter.nih.gov/v1/Projects/search?query=agency:USDA,DOD,EPA,HHS,NASA,NSF,VA,NCER",
+      "Name": "projects_1",
+      "Uri": "https://api.federalreporter.nih.gov/v1/Projects/search?query=agency:HHS",
+      "Collection": "ff_nih_projects",
+      "ResponseElement": "items"
+    },
+    {
+      "Name": "projects_2",
+      "Uri": "https://api.federalreporter.nih.gov/v1/Projects/search?query=agency:VA",
+      "Collection": "ff_nih_projects",
+      "ResponseElement": "items"
+    },
+    {
+      "Name": "projects_3",
+      "Uri": "https://api.federalreporter.nih.gov/v1/Projects/search?query=agency:USDA,DOD,EPA,NASA,NSF,NCER",
       "Collection": "ff_nih_projects",
       "ResponseElement": "items"
     }

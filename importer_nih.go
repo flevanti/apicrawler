@@ -71,6 +71,7 @@ func importNihEndpointLoop(name string, collection string, uri string, responseE
 		for {
 			attempts++
 			req, _ := http.NewRequest("GET", baseURL, nil)
+			req.Header.Set("Accept", "application/json")
 			response, err := client.Do(req)
 
 			if err != nil {
