@@ -135,3 +135,7 @@ func printFinalStatistics() {
 	fmt.Printf("It has been invoked %v times\n", getInvocations())
 
 }
+
+func getTimestamp() int64 {
+	return time.Now().Unix()
+}

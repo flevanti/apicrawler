@@ -81,20 +81,10 @@ func Handler(payloadLocalScope payloadType) {
 	invocations++
 	printMemUsage("Handler entrypoint")
 
-	/*
-	if payload.MaxPages > 0 {
-		fmt.Printf("Max pages to process %v\n", payload.MaxPages)
-	}
-
-	fmt.Printf("Async saving 🔀 flag is %v\n", strings.ToUpper(strconv.FormatBool(payload.AsyncSaving)))
-*/
 	if payload.SourceID == "" {
 		fmt.Printf("Payload not founf or empty 💥 💥 💥 \n")
 		return
 	}
-
-	heartbeatKeepAlive(payload.SourceID)
-	defer heartbeatEnd()
 
 	if !initialiseMongo() {
 		return
@@ -102,6 +92,12 @@ func Handler(payloadLocalScope payloadType) {
 	defer closeMongo()
 
 	printMemUsage("After mongo initialisation")
+
+	if !heartbeatKeepAlive(payload.SourceID) {
+		fmt.Printf("Keepalive not initialised, see you later....")
+		return
+	}
+	defer heartbeatEnd()
 
 	if _, exists := sourcesConfigs[payload.SourceID]; !exists {
 		// NOT FOUND!
