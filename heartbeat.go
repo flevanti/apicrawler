@@ -113,7 +113,7 @@ func heartbeatCheckIfAlreadyAlive(processKey string) (bool, error) {
 		}
 
 		//HOORAY!
-		fmt.Printf("Looks like no other processes are working on this source")
+		fmt.Printf("Looks like no other processes are working on this source\n")
 		return false, nil
 	}
 
@@ -134,7 +134,7 @@ func heartbeatCheckIfAlreadyAlive(processKey string) (bool, error) {
 	beatLast = recordValue.Lookup("beat_last").Int64() //this does not perform casting so the type needs to be the same as the one saved!
 
 	fmt.Printf("Another process is currently processing the same source! 👷 \n")
-	fmt.Printf("The other process started %s and its last beat was %s",
+	fmt.Printf("The other process started %s and its last beat was %s\n",
 		time.Unix(beatStarted, 0),
 		time.Unix(beatLast, 0))
 
