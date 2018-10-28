@@ -12,15 +12,23 @@ import (
 	"time"
 )
 
-type responseHeaderStructNih struct {
-	TotalCount int           `json:"totalCount"`
-	Offset     int           `json:"offset"`
-	Limit      int           `json:"limit"`
-	TotalPages int           `json:"totalPages"`
-	Items      []interface{} `json:"items"`
+type responseHeaderStructAnds struct {
+	Status  string `json:"status"`
+	Code    string `json:"code"`
+	Message struct {
+		MessageVersion string `json:"message_version"`
+		APIVersion     string `json:"api_version"`
+		Format         string `json:"format"`
+	} `json:"message"`
+	Data struct {
+		NumFound int           `json:"numFound"`
+		Offset   int           `json:"offset"`
+		Limit    int           `json:"limit"`
+		Records  []interface{} `json:"records"`
+	} `json:"data"`
 }
 
-func importNih() {
+func importAnds() {
 	var wg sync.WaitGroup
 
 	fmt.Printf("Endpoints parallel processing enabled? %s\n",
@@ -33,11 +41,17 @@ func importNih() {
 			fmt.Printf("Import skipped ❗\n")
 			continue
 		}
+		apiKey := os.Getenv("API_KEY_ANDS")
+		if apiKey == "" {
+			fmt.Printf("Api key not found, import skipped❗\n")
+			continue
+		}
+		v.Uri = v.Uri + "&api_key=" + apiKey
 		wg.Add(1)
 		if importerConfig.EndpointsParallelProcessing {
-			go importNihEndpointLoop( v.Collection, v.Uri, &wg)
+			go importAndsEndpointLoop(v.Collection, v.Uri, &wg)
 		} else {
-			importNihEndpointLoop( v.Collection, v.Uri, &wg)
+			importAndsEndpointLoop(v.Collection, v.Uri, &wg)
 		}
 	}
 
@@ -47,11 +61,11 @@ func importNih() {
 
 }
 
-func importNihEndpointLoop(collection string, uri string, wgCaller *sync.WaitGroup) {
+func importAndsEndpointLoop(collection string, uri string, wgCaller *sync.WaitGroup) {
 	defer wgCaller.Done()
 
 	currentPage := 0
-	offset := 1
+	offset := 0
 	baseURL := ""
 	size := importerConfig.PageSize
 	client := &http.Client{}
@@ -64,14 +78,14 @@ func importNihEndpointLoop(collection string, uri string, wgCaller *sync.WaitGro
 		attempts := 0
 		currentPage++
 		baseURL = uri +
-			"&offset=" + strconv.Itoa(offset)
+			"&offset=" + strconv.Itoa(offset) +
+			"&limit=" + strconv.Itoa(size)
 		offset = offset + size
 		fmt.Printf("Querying %s\n", baseURL)
 
 		for {
 			attempts++
 			req, _ := http.NewRequest("GET", baseURL, nil)
-			req.Header.Set("Accept", "application/json")
 			response, err := client.Do(req)
 
 			if err != nil {
@@ -100,15 +114,15 @@ func importNihEndpointLoop(collection string, uri string, wgCaller *sync.WaitGro
 		//horrible but to the point for the moment
 		data = bytes.Replace(data, []byte(":null"), []byte(":\"\""), -1)
 
-		var dataJSON responseHeaderStructNih
+		var dataJSON responseHeaderStructAnds
 		err := json.Unmarshal(data, &dataJSON)
 		if err != nil {
 			fmt.Printf("Error while converting response to json object %s 💥\n", err)
 			return
 		}
-		fmt.Printf("page %d retrieved, pages left %d\n", currentPage, dataJSON.TotalPages)
+		fmt.Printf("page %d retrieved, docs total %d current offset %d\n", currentPage, dataJSON.Data.NumFound, offset)
 
-		dataToSave = dataJSON.Items
+		dataToSave = dataJSON.Data.Records
 
 		wg.Add(1)
 		if importerConfig.AsyncSaving {
@@ -126,7 +140,7 @@ func importNihEndpointLoop(collection string, uri string, wgCaller *sync.WaitGro
 			break
 		}
 
-		if dataJSON.TotalPages == 0 {
+		if offset >= dataJSON.Data.NumFound {
 			fmt.Printf("All pages retrieved...\n")
 			break
 		}

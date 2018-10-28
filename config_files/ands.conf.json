@@ -1,0 +1,15 @@
+{
+  "SourceID": "ANDS",
+  "MaxPages": 0,
+  "PageSize": 500,
+  "AsyncSaving": true,
+  "EndpointsParallelProcessing": true,
+  "Endpoints": [
+    {
+      "Name": "grants",
+      "Uri": "https://researchdata.ands.org.au/api/v2.0/registry/activities?",
+      "Collection": "ff_ands_grants",
+      "ResponseElement": "--"
+    }
+  ]
+}

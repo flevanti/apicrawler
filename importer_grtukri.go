@@ -36,9 +36,9 @@ func importGrtukri() {
 		}
 		wg.Add(1)
 		if importerConfig.EndpointsParallelProcessing {
-			go importGrtukriEndpointLoop(v.Name, v.Collection, v.Uri, v.ResponseElement, &wg)
+			go importGrtukriEndpointLoop( v.Collection, v.Uri, v.ResponseElement, &wg)
 		} else {
-			importGrtukriEndpointLoop(v.Name, v.Collection, v.Uri, v.ResponseElement, &wg)
+			importGrtukriEndpointLoop( v.Collection, v.Uri, v.ResponseElement, &wg)
 		}
 	}
 
@@ -48,7 +48,7 @@ func importGrtukri() {
 
 }
 
-func importGrtukriEndpointLoop(name string, collection string, uri string, responseElement string, wgCaller *sync.WaitGroup) {
+func importGrtukriEndpointLoop(collection string, uri string, responseElement string, wgCaller *sync.WaitGroup) {
 	defer wgCaller.Done()
 
 	currentPage := 0
@@ -61,7 +61,7 @@ func importGrtukriEndpointLoop(name string, collection string, uri string, respo
 	for {
 		currentPage++
 		baseURL = uri +
-			"?s=" + strconv.Itoa(size) +
+			"&s=" + strconv.Itoa(size) +
 			"&p=" + strconv.Itoa(currentPage)
 		fmt.Printf("Querying %s\n", baseURL)
 
