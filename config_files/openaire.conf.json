@@ -1,0 +1,15 @@
+{
+  "SourceID": "OPENAIRE",
+  "MaxPages": 0,
+  "PageSize": 100,
+  "AsyncSaving": true,
+  "EndpointsParallelProcessing": true,
+  "Endpoints": [
+    {
+      "Name": "projects",
+      "Uri": "http://api.openaire.eu/search/projects?&format=json",
+      "Collection": "ff_openaire_projects",
+      "ResponseElement": "--"
+    }
+  ]
+}

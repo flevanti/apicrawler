@@ -31,11 +31,12 @@ var dummyPayloadFileName = "dummyPayload.json"
 var bootTime int64
 var invocations int
 var sourcesConfigs = map[string]map[string]string{
-	"GRTUKRI": {"config_file": "grtukri.conf.json", "function_name": "importGrtukri"},
-	"PUBMED":  {"config_file": "pubmed.conf.json", "function_name": "importPubmed"},
-	"NIH":     {"config_file": "nih.conf.json", "function_name": "importPubmed"},
-	"ANDS":    {"config_file": "ands.conf.json", "function_name": "importAnds"},
-	"EPMC":    {"config_file": "epmc.conf.json", "function_name": "importEpmc"},
+	"GRTUKRI":  {"config_file": "grtukri.conf.json", "function_name": "importGrtukri"},
+	"PUBMED":   {"config_file": "pubmed.conf.json", "function_name": "importPubmed"},
+	"NIH":      {"config_file": "nih.conf.json", "function_name": "importPubmed"},
+	"ANDS":     {"config_file": "ands.conf.json", "function_name": "importAnds"},
+	"EPMC":     {"config_file": "epmc.conf.json", "function_name": "importEpmc"},
+	"OPENAIRE": {"config_file": "openaire.conf.json", "function_name": "importOpenaire"},
 }
 
 // main
@@ -127,6 +128,9 @@ func Handler(payloadLocalScope payloadType) {
 		break
 	case "ANDS":
 		importAnds()
+		break
+	case "OPENAIRE":
+		importOpenaire()
 		break
 	default:
 		fmt.Printf("Unable to find importer function for source %s 💥💥 \n", payload.SourceID)
