@@ -1,7 +1,7 @@
 {
   "SourceID": "NIH",
   "MaxPages": 0,
-  "PageSize": 500,
+  "PageSize": 50,
   "AsyncSaving": true,
   "EndpointsParallelProcessing": true,
   "Endpoints": [
