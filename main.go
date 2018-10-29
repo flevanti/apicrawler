@@ -34,8 +34,8 @@ var sourcesConfigs = map[string]map[string]string{
 	"GRTUKRI": {"config_file": "grtukri.conf.json", "function_name": "importGrtukri"},
 	"PUBMED":  {"config_file": "pubmed.conf.json", "function_name": "importPubmed"},
 	"NIH":     {"config_file": "nih.conf.json", "function_name": "importPubmed"},
-	"ANDS":     {"config_file": "ands.conf.json", "function_name": "importAnds"},
-
+	"ANDS":    {"config_file": "ands.conf.json", "function_name": "importAnds"},
+	"EPMC":    {"config_file": "epmc.conf.json", "function_name": "importEpmc"},
 }
 
 // main
@@ -119,8 +119,8 @@ func Handler(payloadLocalScope payloadType) {
 	case "GRTUKRI":
 		importGrtukri()
 		break
-	case "PUBMED":
-		importGrtukri()
+	case "EPMC":
+		importEpmc()
 		break
 	case "NIH":
 		importNih()

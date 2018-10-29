@@ -1,0 +1,184 @@
+{
+  "SourceID": "EPMC",
+  "MaxPages": 0,
+  "PageSize": 50,
+  "AsyncSaving": true,
+  "EndpointsParallelProcessing": true,
+  "Endpoints": [
+    {
+      "Name": "Grants_WT",
+      "Uri": "http://www.ebi.ac.uk/europepmc/GristAPI/rest/get/resultType=core&format=json&query=ga:\"Action on Hearing Loss\"",
+      "Collection": "ff_epmc_grants",
+      "ResponseElement": "--"
+    },
+    {
+      "Name": "Grants_WT",
+      "Uri": "http://www.ebi.ac.uk/europepmc/GristAPI/rest/get/resultType=core&format=json&query=ga:\"Alzheimer's Society\"",
+      "Collection": "ff_epmc_grants",
+      "ResponseElement": "--"
+    },
+    {
+      "Name": "Grants_WT",
+      "Uri": "http://www.ebi.ac.uk/europepmc/GristAPI/rest/get/resultType=core&format=json&query=ga:\"Austrian Science Fund FWF\"",
+      "Collection": "ff_epmc_grants",
+      "ResponseElement": "--"
+    },
+    {
+      "Name": "Grants_WT",
+      "Uri": "http://www.ebi.ac.uk/europepmc/GristAPI/rest/get/resultType=core&format=json&query=ga:\"Biotechnology and Biological Sciences Research Council\"",
+      "Collection": "ff_epmc_grants",
+      "ResponseElement": "--"
+    },
+    {
+      "Name": "Grants_WT",
+      "Uri": "http://www.ebi.ac.uk/europepmc/GristAPI/rest/get/resultType=core&format=json&query=ga:\"Bloodwise\"",
+      "Collection": "ff_epmc_grants",
+      "ResponseElement": "--"
+    },
+    {
+      "Name": "Grants_WT",
+      "Uri": "http://www.ebi.ac.uk/europepmc/GristAPI/rest/get/resultType=core&format=json&query=ga:\"Breast Cancer Now\"",
+      "Collection": "ff_epmc_grants",
+      "ResponseElement": "--"
+    },
+    {
+      "Name": "Grants_WT",
+      "Uri": "http://www.ebi.ac.uk/europepmc/GristAPI/rest/get/resultType=core&format=json&query=ga:\"British Heart Foundation\"",
+      "Collection": "ff_epmc_grants",
+      "ResponseElement": "--"
+    },
+    {
+      "Name": "Grants_WT",
+      "Uri": "http://www.ebi.ac.uk/europepmc/GristAPI/rest/get/resultType=core&format=json&query=ga:\"Cancer Research UK\"",
+      "Collection": "ff_epmc_grants",
+      "ResponseElement": "--"
+    },
+    {
+      "Name": "Grants_WT",
+      "Uri": "http://www.ebi.ac.uk/europepmc/GristAPI/rest/get/resultType=core&format=json&query=ga:\"Chief Scientist Office\"",
+      "Collection": "ff_epmc_grants",
+      "ResponseElement": "--"
+    },
+    {
+      "Name": "Grants_WT",
+      "Uri": "http://www.ebi.ac.uk/europepmc/GristAPI/rest/get/resultType=core&format=json&query=ga:\"Diabetes UK\"",
+      "Collection": "ff_epmc_grants",
+      "ResponseElement": "--"
+    },
+    {
+      "Name": "Grants_WT",
+      "Uri": "http://www.ebi.ac.uk/europepmc/GristAPI/rest/get/resultType=core&format=json&query=ga:\"European Research Council\"",
+      "Collection": "ff_epmc_grants",
+      "ResponseElement": "--"
+    },
+    {
+      "Name": "Grants_WT",
+      "Uri": "http://www.ebi.ac.uk/europepmc/GristAPI/rest/get/resultType=core&format=json&query=ga:\"Marie Curie\"",
+      "Collection": "ff_epmc_grants",
+      "ResponseElement": "--"
+    },
+    {
+      "Name": "Grants_WT",
+      "Uri": "http://www.ebi.ac.uk/europepmc/GristAPI/rest/get/resultType=core&format=json&query=ga:\"Medical Research Council\"",
+      "Collection": "ff_epmc_grants",
+      "ResponseElement": "--"
+    },
+    {
+      "Name": "Grants_WT",
+      "Uri": "http://www.ebi.ac.uk/europepmc/GristAPI/rest/get/resultType=core&format=json&query=ga:\"Motor Neurone Disease Association\"",
+      "Collection": "ff_epmc_grants",
+      "ResponseElement": "--"
+    },
+    {
+      "Name": "Grants_WT",
+      "Uri": "http://www.ebi.ac.uk/europepmc/GristAPI/rest/get/resultType=core&format=json&query=ga:\"Multiple Sclerosis Society\"",
+      "Collection": "ff_epmc_grants",
+      "ResponseElement": "--"
+    },
+    {
+      "Name": "Grants_WT",
+      "Uri": "http://www.ebi.ac.uk/europepmc/GristAPI/rest/get/resultType=core&format=json&query=ga:\"Myrovlytis Trust\"",
+      "Collection": "ff_epmc_grants",
+      "ResponseElement": "--"
+    },
+    {
+      "Name": "Grants_WT",
+      "Uri": "http://www.ebi.ac.uk/europepmc/GristAPI/rest/get/resultType=core&format=json&query=ga:\"National Centre for the Replacement, Refinement and Reduction of Animals in Research\"",
+      "Collection": "ff_epmc_grants",
+      "ResponseElement": "--"
+    },
+    {
+      "Name": "Grants_WT",
+      "Uri": "http://www.ebi.ac.uk/europepmc/GristAPI/rest/get/resultType=core&format=json&query=ga:\"National Institute for Health Research (Department of Health)\"",
+      "Collection": "ff_epmc_grants",
+      "ResponseElement": "--"
+    },
+    {
+      "Name": "Grants_WT",
+      "Uri": "http://www.ebi.ac.uk/europepmc/GristAPI/rest/get/resultType=core&format=json&query=ga:\"Parkinson's UK\"",
+      "Collection": "ff_epmc_grants",
+      "ResponseElement": "--"
+    },
+    {
+      "Name": "Grants_WT",
+      "Uri": "http://www.ebi.ac.uk/europepmc/GristAPI/rest/get/resultType=core&format=json&query=ga:\"Prostate Cancer UK\"",
+      "Collection": "ff_epmc_grants",
+      "ResponseElement": "--"
+    },
+    {
+      "Name": "Grants_WT",
+      "Uri": "http://www.ebi.ac.uk/europepmc/GristAPI/rest/get/resultType=core&format=json&query=ga:\"Swiss National Science Foundation\"",
+      "Collection": "ff_epmc_grants",
+      "ResponseElement": "--"
+    },
+    {
+      "Name": "Grants_WT",
+      "Uri": "http://www.ebi.ac.uk/europepmc/GristAPI/rest/get/resultType=core&format=json&query=ga:\"Telethon Italy\"",
+      "Collection": "ff_epmc_grants",
+      "ResponseElement": "--"
+    },
+    {
+      "Name": "Grants_WT",
+      "Uri": "http://www.ebi.ac.uk/europepmc/GristAPI/rest/get/resultType=core&format=json&query=ga:\"The Academy of Medical Sciences\"",
+      "Collection": "ff_epmc_grants",
+      "ResponseElement": "--"
+    },
+    {
+      "Name": "Grants_WT",
+      "Uri": "http://www.ebi.ac.uk/europepmc/GristAPI/rest/get/resultType=core&format=json&query=ga:\"The Dunhill Medical Trust\"",
+      "Collection": "ff_epmc_grants",
+      "ResponseElement": "--"
+    },
+    {
+      "Name": "Grants_WT",
+      "Uri": "http://www.ebi.ac.uk/europepmc/GristAPI/rest/get/resultType=core&format=json&query=ga:\"The Wellcome Trust/DBT India Alliance\"",
+      "Collection": "ff_epmc_grants",
+      "ResponseElement": "--"
+    },
+    {
+      "Name": "Grants_WT",
+      "Uri": "http://www.ebi.ac.uk/europepmc/GristAPI/rest/get/resultType=core&format=json&query=ga:\"Versus Arthritis\"",
+      "Collection": "ff_epmc_grants",
+      "ResponseElement": "--"
+    },
+    {
+      "Name": "Grants_WT",
+      "Uri": "http://www.ebi.ac.uk/europepmc/GristAPI/rest/get/resultType=core&format=json&query=ga:\"Wellcome Trust\"",
+      "Collection": "ff_epmc_grants",
+      "ResponseElement": "--"
+    },
+    {
+      "Name": "Grants_WT",
+      "Uri": "http://www.ebi.ac.uk/europepmc/GristAPI/rest/get/resultType=core&format=json&query=ga:\"World Health Organization\"",
+      "Collection": "ff_epmc_grants",
+      "ResponseElement": "--"
+    },
+    {
+      "Name": "Grants_WT",
+      "Uri": "http://www.ebi.ac.uk/europepmc/GristAPI/rest/get/resultType=core&format=json&query=ga:\"Worldwide Cancer Research\"",
+      "Collection": "ff_epmc_grants",
+      "ResponseElement": "--"
+    }
+  ]
+}
+
