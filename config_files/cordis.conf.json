@@ -1,0 +1,33 @@
+{
+  "SourceID": "GRTUKRI",
+  "MaxPages": 0,
+  "PageSize": 100,
+  "AsyncSaving": true,
+  "EndpointsParallelProcessing": true,
+  "Endpoints": [
+    {
+      "Name": "organisations",
+      "Uri": "https://gtr.ukri.org/gtr/api/organisations?",
+      "Collection": "ff_grtukri_organisations",
+      "ResponseElement": "organisation"
+    },
+    {
+      "Name": "funds",
+      "Uri": "https://gtr.ukri.org/gtr/api/funds?",
+      "Collection": "ff_grtukri_funds",
+      "ResponseElement": "fund"
+    },
+    {
+      "Name": "projects",
+      "Uri": "https://gtr.ukri.org/gtr/api/projects?",
+      "Collection": "ff_grtukri_projects",
+      "ResponseElement": "project"
+    },
+    {
+      "Name": "persons",
+      "Uri": "https://gtr.ukri.org/gtr/api/persons?",
+      "Collection": "ff_grtukri_persons",
+      "ResponseElement": "person"
+    }
+  ]
+}
