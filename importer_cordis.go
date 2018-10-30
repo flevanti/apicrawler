@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-type responseHeaderStructNih struct {
+type responseHeaderStructCordis struct {
 	TotalCount int           `json:"totalCount"`
 	Offset     int           `json:"offset"`
 	Limit      int           `json:"limit"`
@@ -20,7 +20,7 @@ type responseHeaderStructNih struct {
 	Items      []interface{} `json:"items"`
 }
 
-func importNih() {
+func importCordis() {
 	var wg sync.WaitGroup
 
 	fmt.Printf("Endpoints parallel processing enabled? %s\n",
@@ -35,9 +35,9 @@ func importNih() {
 		}
 		wg.Add(1)
 		if importerConfig.EndpointsParallelProcessing {
-			go importNihEndpointLoop( v.Collection, v.Uri, &wg)
+			go importCordisEndpointLoop(v.Collection, v.Uri, &wg)
 		} else {
-			importNihEndpointLoop( v.Collection, v.Uri, &wg)
+			importCordisEndpointLoop(v.Collection, v.Uri, &wg)
 		}
 	}
 
@@ -47,7 +47,7 @@ func importNih() {
 
 }
 
-func importNihEndpointLoop(collection string, uri string, wgCaller *sync.WaitGroup) {
+func importCordisEndpointLoop(collection string, uri string, wgCaller *sync.WaitGroup) {
 	defer wgCaller.Done()
 
 	currentPage := 0

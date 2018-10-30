@@ -37,6 +37,7 @@ var sourcesConfigs = map[string]map[string]string{
 	"ANDS":     {"config_file": "ands.conf.json", "function_name": "importAnds"},
 	"EPMC":     {"config_file": "epmc.conf.json", "function_name": "importEpmc"},
 	"OPENAIRE": {"config_file": "openaire.conf.json", "function_name": "importOpenaire"},
+	"CORDIS":   {"config_file": "cordis.conf.json", "function_name": "importCordis"},
 }
 
 // main
@@ -131,6 +132,9 @@ func Handler(payloadLocalScope payloadType) {
 		break
 	case "OPENAIRE":
 		importOpenaire()
+		break
+	case "CORDIS":
+		importCordis()
 		break
 	default:
 		fmt.Printf("Unable to find importer function for source %s 💥💥 \n", payload.SourceID)

@@ -1,33 +1,33 @@
 {
-  "SourceID": "GRTUKRI",
+  "SourceID": "CORDIS",
   "MaxPages": 0,
-  "PageSize": 100,
+  "PageSize": 0,
   "AsyncSaving": true,
   "EndpointsParallelProcessing": true,
   "Endpoints": [
     {
-      "Name": "organisations",
-      "Uri": "https://gtr.ukri.org/gtr/api/organisations?",
-      "Collection": "ff_grtukri_organisations",
-      "ResponseElement": "organisation"
+      "Name": "projects_h2020",
+      "Uri": "https://cordis.europa.eu/data/cordis-h2020projects.csv",
+      "Collection": "ff_cordis_projects",
+      "ResponseElement": "--"
     },
     {
-      "Name": "funds",
-      "Uri": "https://gtr.ukri.org/gtr/api/funds?",
-      "Collection": "ff_grtukri_funds",
-      "ResponseElement": "fund"
+      "Name": "projects_fp5",
+      "Uri": "https://cordis.europa.eu/data/cordis-fp5projects.csv",
+      "Collection": "ff_cordis_projects",
+      "ResponseElement": "--"
     },
     {
-      "Name": "projects",
-      "Uri": "https://gtr.ukri.org/gtr/api/projects?",
-      "Collection": "ff_grtukri_projects",
-      "ResponseElement": "project"
+      "Name": "projects_fp6",
+      "Uri": "https://cordis.europa.eu/data/cordis-fp6projects.csv",
+      "Collection": "ff_cordis_projects",
+      "ResponseElement": "--"
     },
     {
-      "Name": "persons",
-      "Uri": "https://gtr.ukri.org/gtr/api/persons?",
-      "Collection": "ff_grtukri_persons",
-      "ResponseElement": "person"
+      "Name": "projects_fp7",
+      "Uri": "https://cordis.europa.eu/data/cordis-fp7projects.csv",
+      "Collection": "ff_cordis_projects",
+      "ResponseElement": "--"
     }
   ]
 }
